@@ -1,0 +1,23 @@
+public class now {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.next();
+        int count=1;    //counting the character itself
+        int ans=1;  
+        for(int i=0;i<s.length();i++){
+            if(i+1<s.length()){
+                if(s.charAt(i)==s.charAt(i+1)){
+                    count++;
+                    ans=Math.max(count,ans);
+                }
+                else count=1;
+            }
+        }
+        System.out.println(ans); 
+        sc.close();
+    }
+}
+
+
+LOGIC - Basically using Kadane's algorithm
+Since, even if there are no matches found, the ans=1 becuase we have to count one char itself as the solution
