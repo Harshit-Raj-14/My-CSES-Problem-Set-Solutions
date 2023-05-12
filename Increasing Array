@@ -1,0 +1,26 @@
+public class now {
+    public static long solve(int arr[]){
+        long count=0;
+        for(int i=0;i+1<arr.length;i++){
+            if(arr[i+1]<arr[i]){
+                count+=(arr[i]-arr[i+1]);
+                arr[i+1]=arr[i];    //update the array also otherwise it will fail test cases when the next element will be again tallied against to its next
+            }
+        }
+        return count;
+    }
+ 
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int arr[] = new int[n];
+        for(int i=0;i<n;i++){
+            arr[i]=sc.nextInt();
+        }
+        long ans = solve(arr);
+        System.out.println(ans);
+        sc.close();
+    }
+}
+ 
+NOTE - Don't forget to update element when calcualting count becuase otherwise it will fail test cases when the next element will be again tallied against to its nex
