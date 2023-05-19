@@ -1,0 +1,22 @@
+import java.util.*;
+
+public class hello{
+    public static void main (String args[]){
+        Scanner sc = new Scanner(System.in);
+        int t=sc.nextInt();
+        while(t-->0){
+            int r=sc.nextInt();
+            int c=sc.nextInt();
+
+        }
+        sc.close();
+    }
+}
+
+/*
+Note -spiral matrix is 1 indexed in question
+The problem can be divided into two parts :- rows=i, columns=j
+if(i>=j) => lower triangular matrix including the diagonal
+else(i<j) => upper triangular matrix
+Each of the above two cases can be subdivded into two more where i is even or i is odd
+*/
