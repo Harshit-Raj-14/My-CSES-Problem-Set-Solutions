@@ -1,0 +1,31 @@
+import java.util.*;
+public class Main1{
+    public static void main (String args[]){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int count5=0;
+        for(int i=5;n/i>0;i*=5){
+            count5+=n/i;
+        }
+        System.out.println(count5);
+        sc.close();
+    }
+}
+
+/*
+LOGIC---
+The number of trailing zeroes in any factorial of a number is equal to the occurence of 10 in that number as a multiplicant.
+Now where this 10 comes from, obviously- 5x2=10
+So, if w ethink about the number of 2's and 5's occuring in n!
+Occurence of 2 > Occurence of 5
+So, we can be sure that the occurence of 10 == occurence of 5
+
+We already know the formula:
+f(5) = Summation of(Math.floor(n/5) + Math.floor(n/5^2) + Math.floor(n/5^3) + .... Math.floor(n/5^k)) till the value becoems zero
+
+
+Conclusion:
+A trailing zero is always produced by prime factors 2 and 5.
+Trailing 0s in n! = Count of 5s in prime factors of n!
+                  = floor(n/5) + floor(n/25) + floor(n/125) + ....
+*/
