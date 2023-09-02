@@ -1,0 +1,36 @@
+import java.util.*;
+public class Main1{
+    public static void main (String args[]){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int M=1000000007;   //10^9 + 7
+        int ans=1;
+        while(n!=0){
+            ans=ans*2;
+            ans=ans%M;    //can also directly do this - ans=(ans*2)%M;
+            n--;
+        }
+        System.out.println(ans%M);
+        sc.close();
+    }
+}
+
+/*
+LOGIC---
+This question is basically permutation and combination.
+When saying bit string -> the string is only made up of 0 and 1.
+
+Here, n is actually the length of string.
+
+
+So, if n=3
+We have three places : _ _ _
+We have two chocies either 0 or 1 to place in each box.
+
+So, possible numebr of bit strings of length 3 = 2*2*2 = 8
+
+But since we are asked to print the answer as modulo 10^9 +7
+We need to beware that there are several n vlaues where the ans will overflow.
+
+So, we will moduli each step where our answer might overflow.
+*/
