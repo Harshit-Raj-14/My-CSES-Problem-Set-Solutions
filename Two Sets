@@ -1,0 +1,139 @@
+/* GREEDY SOLUTION, GIVES TLE, DON'T KNOW WHY? THOSE WHO WROTE IT IN C++ GOT THEIRS PASSED SO JUST CHANGE THE CODE TO C++ OTHERWISE THERE'S NOTHING WRONG WITH THIS JAVA CODE TC-O(n) */
+import java.util.*;
+public class Main2{
+    public static void main(String args[]){
+        Scanner sc = new Scanner(System.in);
+        long n=sc.nextLong();
+        long fullsum=n*(n+1)/2;
+        if(fullsum%2==0){
+            System.out.println("YES");
+            long targetsum = fullsum/2;
+            ArrayList<Long> firstset = new ArrayList<>();   //we will greedily put all large numbers here till we reach target
+            ArrayList<Long> secondset = new ArrayList<>();  //the numbers which cannot be put in first set
+            long i=n;
+            while(i!=0){
+                if(targetsum-i>=0){
+                    targetsum-=i;
+                    firstset.add(i);
+                }
+                else secondset.add(i);
+                i--;
+            }
+            System.out.println(firstset.size());
+            print(firstset); 
+            System.out.println(secondset.size());
+            print(secondset);      
+        }
+        else System.out.print("NO");
+        sc.close();
+    }
+
+    public static void print(ArrayList<Long> list){
+        for(int i=0;i<list.size();i++){
+            System.out.print(list.get(i)+" ");
+        }
+        System.out.println();
+    }
+}
+
+
+LOGIC---
+sum of n natural numbers = n(n+1)/2
+
+Now if n:odd
+Then sum=odd*even/2 = even/2= can be even or odd 
+
+Now if n:even
+Then sum=even*odd/2 = even/2 = can be even or odd 
+
+Our task is to create two sets consisting of n distinct nautral numbers from 1 to n which will have equal sum.
+This can only happen if fullsum is even. Only then we cna divide it into two sets and still have two equal sum sets.
+
+n=1 : NO, fullsum=1
+
+Let's see n=2 : NO : [1,2] : odd numbers:1, even numbers:1, fullsum=3
+n=3 : YES : [1,2,3] => [1,2] [3] : odd numbers:2, even numbers:1, fullsum=6
+n=4 : YES : [1,2,3,4] => [1,4] [2,3] : odd numbers:2, even numbers:2, fullsum=10
+n=5 : NO : [1,2,3,4,5] : odd numbers:3, even numbers:2, fullsum=15
+n=6 : NO : [1,2,3,4,5,6] : odd numbers:3, even numbers:3, fullsum=21
+n=7 : YES : [1,2,3,4,5,6,7] : [1,2,4,7] [3,5,6] : odd numbers:4, even numbers:3, fullsum=28
+
+
+From above analysis it is clear that only when fullsum is even we can actually divide two sets otherwise not.
+
+DIVIDING SETS GREEDILY---
+Now its simply just weighing.
+We know what will be the sum of two sets individually = sum/2
+A natural approach is to greedily add the largest numbers from n,n−1,…,1 such that the sum of the selected numbers does not exceed n(n+1)/4​ (the required sum for each of the two piles). 
+If it does exceed, consider the next smaller number as the new candidate and go from there.
+
+i.e: n=7 => [7,6,1] [2,3,4,5] => this is our logic for creating two sets now
+
+The problem is greedy approach gives TLE. Damn it.
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+Another way to divide set intuitively - 
+eg: 1 2 3 4 5 6 7 8
+Set 1: (first elemnt + last element) + (third element + third last element) + ....
+Set 2 : (second element + second last element) + (fourth elemnt + fourth last element) + ....
+
+Or,
+
+To be able to divide the set into two different sets of equal sum, n must be of the form 4k or 4k+3,
+case I:(n%4==0) -> n = 4k put first n/4 numbers and last n/4 in first set, and remaining n/2 numbers in second set, 
+for eg, n= 8 => {1,2,7,8} {3,4,5,6}
+
+case II:(n%4==3) -> n = 4k + 3
+observation- 4n 4n+1 4n+2 4n+3, then 4n + 4n+3 == 4n + 1 + 4n + 2, therefore make partition accordingly.
+for eg, n=3
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+Conclusion-
+The sum of first n natural number is n.(n+1)/2 . If this is even we can always partition the n numbers into 2 sets; such that sum of elements of each set is equal.
+
+
+
+
+/* ANOTHER APPROACH OF FORMING THE SETS */
+import java.util.*;
+public class Main2{
+    public static void main(String args[]){
+        Scanner sc = new Scanner(System.in);
+        long n=sc.nextLong();
+        long fullsum=(long)n*(long)(n+1)/(long)2;
+        if(fullsum%2==0){
+            System.out.println("YES");
+            long targetsum = fullsum/2;
+            ArrayList<Long> firstset = new ArrayList<>();   //we will greedily put all large numbers here till we reach target
+            ArrayList<Long> secondset = new ArrayList<>();  //the numbers which cannot be put in first set
+
+            if(n%4==0){
+                for(long i=1;i<=n;i++){
+                    if(i%4==1 || i%4==0) firstset.add(i);
+                    else secondset.add(i);
+                }
+            }
+            else if(n%4==3){
+                for(long i=1;i<=n;i++){
+                    if(i%4==1 || i%4==2) firstset.add(i);
+                    else secondset.add(i);
+                }
+            }
+
+            System.out.println(firstset.size());
+            print(firstset); 
+            System.out.println(secondset.size());
+            print(secondset);      
+        }
+        else System.out.print("NO");
+        sc.close();
+    }
+
+    public static void print(ArrayList<Long> list){
+        for(int i=0;i<list.size();i++){
+            System.out.print(list.get(i)+" ");
+        }
+        System.out.println();
+    }
+}
