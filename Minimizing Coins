@@ -1,0 +1,125 @@
+/* TABULATION */
+import java.util.*;
+public class main{
+    public static void main(String args[]){
+        Scanner sc = new Scanner(System.in);
+        int n=sc.nextInt();
+        int x = sc.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+        int dp[] = new int[x+1];    //the final state we want is dp[x] -> min number of coins to make x
+        Arrays.fill(dp, Integer.MAX_VALUE - 1); //since we want to later calculate min coins needed during finding minimum also MAX-1 reason being it can cause overflow if we went to next step or so
+        dp[0]=0;    //0 coins required to make sum 0
+        for(int i=1;i<=x;i++){
+            for(int j=0;j<n;j++){
+                if(arr[j]<=i){   //value of coin should be less than the sum we want to make
+                    dp[i] = Math.min(dp[i], dp[i-arr[j]]+1); 
+                }
+            }
+        }
+        System.out.println((dp[x]<Integer.MAX_VALUE - 1) ? dp[x]:-1);
+    }
+}
+ 
+/*
+LOGIC---
+We need to make sum x. And let's say we have coin c1, c2, c3.... and so on.
+
+So, if we choose c1, now we want to construct x-c1.
+if we choose c2, now we want to construct x-c2.
+... and so on.
+Now, these x-cn are actually smaller subproblems that we need to solve to ocnstruct x.
+
+So, let's say we want to ocnstruct 11, and we first choose coin 5, now we need to ocntruct coin 6.
+Now, we can directly address this state if we have precalculated how to make 6. 
+Now 6 can be made using coins lower than 6, so maybe larger than values of 6 like 7 cannot be used.
+
+So, we stop when we reach x=0, there we dont need any more coins.
+dp[0]=0 => to make sum 0 we need 0 coins
+
+where dp[n] => minimum number of coins required to make sum n
+
+Now, dp[n]= dp[n-c1] + dp[n-c2] + dp[n-c3]+....
+Now all of these subproblems dp means using 1 coin.
+So, which one dp subproblme to use => the one that gives me minimum no of coins
+
+dp[n] = MIN(dp[n-ci]) + 1, where i goes form 1 to n; +1 becuase we are adding a coin to make sum now x-ci
+
+
+Now we need to construct our subproblme till x-> becuase w eneed to find dp[x] -> minimum number of coins to make x
+
+
+TC-O(n.x)
+SC- O(x)
+*/
+
+/* RECURSION TLE */
+import java.util.*;
+public class main{
+    public static void main(String args[]){
+        Scanner sc = new Scanner(System.in);
+        int n=sc.nextInt();
+        int x = sc.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+        System.out.println(solve(n, arr, x, 0));
+    }
+ 
+    public static int solve(int n, int arr[], int x, int currsum){
+        if(currsum==x) return 0;    //reached our ans, so no longer coins req
+        if(currsum>x) return -1;     //cant reach our answer
+        int minCoins = Integer.MAX_VALUE;
+        for(int i=0;i<n;i++){
+            int currcoins = solve(n, arr, x, currsum+arr[i]);
+            if(currcoins!=-1) minCoins = Math.min(minCoins, currcoins+1);
+        }
+        return minCoins == Integer.MAX_VALUE ? -1 : minCoins;
+    }
+}
+ 
+ 
+/*
+LOGIC---
+ 
+*/
+
+
+/* MEMOISATION */
+import java.util.*;
+public class main{
+    public static void main(String args[]){
+        Scanner sc = new Scanner(System.in);
+        int n=sc.nextInt();
+        int x = sc.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) arr[i] = sc.nextInt();
+
+        int memo[][] = new int[n + 1][x + 1];
+        for (int row[] : memo) Arrays.fill(row, -2);
+        System.out.println(solve(n, arr, x, memo, 0));
+    }
+ 
+    public static int solve(int n, int arr[], int x, int memo[][], int currIndex){
+        if (currIndex == n) return (x==0)?0:-1; // If current index reached n, return 0 only if x is also 0.
+        if (memo[currIndex][x] != -2) return memo[currIndex][x]; 
+        int minCoins = -1;
+        if (x - arr[currIndex] >= 0) {
+            int includeCurr = solve(n, arr, x-arr[currIndex], memo, currIndex);
+            if (includeCurr != -1) {
+                minCoins = includeCurr + 1;
+            }
+        }
+        int excludeCurr = solve(n, arr, x, memo, currIndex + 1);
+        if (excludeCurr != -1) {
+            minCoins = minCoins == -1 ? excludeCurr : Math.min(minCoins, excludeCurr);
+        }
+        return memo[currIndex][x] = minCoins;
+    }
+}
+ 
+
+
